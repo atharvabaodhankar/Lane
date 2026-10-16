@@ -1,0 +1,30 @@
+# Dependency directories
+node_modules/
+.pnp
+.pnp.js
+
+# Environment variables & secrets (NEVER COMMIT)
+.env
+.env.local
+.env.*.local
+*.pem
+
+# SAM / AWS build outputs
+.aws-sam/
+samconfig.toml
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Build outputs
+dist/
+build/
+.cache/
+
+# OS files
+.DS_Store
+Thumbs.db
