@@ -1,0 +1,171 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Lane: Smart Cost-Optimizing Gateway for Amazon Bedrock with Fastino GLiDE Routing.
+
+Globals:
+  Function:
+    Timeout: 29
+    MemorySize: 512
+    Runtime: nodejs20.x
+    Architectures:
+      - arm64
+    Tracing: Active
+    Environment:
+      Variables:
+        NODE_ENV: production
+        FASTINO_BASE_URL: https://api.fastino.ai
+        FASTINO_API_KEY: !Ref FastinoApiKey
+        ALLOWED_ORIGINS: !Ref AllowedOrigins
+        DYNAMODB_REQUESTS_TABLE: !Ref LaneRequestsTable
+        DYNAMODB_CACHE_TABLE: !Ref LaneCacheTable
+        DYNAMODB_API_KEYS_TABLE: !Ref LaneApiKeysTable
+
+Parameters:
+  Stage:
+    Type: String
+    Default: prod
+    Description: Deployment stage (dev, staging, prod)
+  FastinoApiKey:
+    Type: String
+    NoEcho: true
+    Default: ""
+    Description: Fastino API Key for GLiDE routing decision models
+  AllowedOrigins:
+    Type: String
+    Default: "*"
+    Description: Permitted CORS origins (comma-separated or *)
+
+Resources:
+  # ============================================================================
+  # 1. API Gateway REST API
+  # ============================================================================
+  LaneApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Stage
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization,x-api-key,Idempotency-Key'"
+        AllowOrigin: "'*'"
+      GatewayResponses:
+        DEFAULT_4XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+        DEFAULT_5XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+
+  # ============================================================================
+  # 2. Lambda Function (Express with serverless-express)
+  # ============================================================================
+  LaneGatewayFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../backend/
+      Handler: src/handler.handler
+      Description: Lane Bedrock router gateway function
+      Policies:
+        # DynamoDB permissions
+        - DynamoDBCrudPolicy:
+            TableName: !Ref LaneRequestsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref LaneCacheTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref LaneApiKeysTable
+        # Amazon Bedrock least-privilege invocation
+        - Statement:
+            - Sid: BedrockConverseAccess
+              Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+                - bedrock:InvokeModelWithResponseStream
+              Resource:
+                - "arn:aws:bedrock:*::foundation-model/*"
+                - "arn:aws:bedrock:*:*:inference-profile/*"
+      Events:
+        RootEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LaneApi
+            Path: /api
+            Method: ANY
+        ProxyEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref LaneApi
+            Path: /api/{proxy+}
+            Method: ANY
+
+  # ============================================================================
+  # 3. DynamoDB Tables (On-Demand billing mode)
+  # ============================================================================
+  LaneRequestsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: tenantId
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: tenantId
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      Tags:
+        - Key: Project
+          Value: Lane
+
+  LaneCacheTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: key
+          AttributeType: S
+      KeySchema:
+        - AttributeName: key
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+      Tags:
+        - Key: Project
+          Value: Lane
+
+  LaneApiKeysTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: keyHash
+          AttributeType: S
+      KeySchema:
+        - AttributeName: keyHash
+          KeyType: HASH
+      Tags:
+        - Key: Project
+          Value: Lane
+
+Outputs:
+  LaneApiEndpoint:
+    Description: Base URL for Lane Gateway API
+    Value: !Sub "https://${LaneApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}"
+  LaneCompletionsEndpoint:
+    Description: OpenAI-compatible completions endpoint
+    Value: !Sub "https://${LaneApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/api/v1/completions"
+  LaneFunctionArn:
+    Description: Lambda Function ARN
+    Value: !GetAtt LaneGatewayFunction.Arn
+  LaneRequestsTableName:
+    Description: DynamoDB Requests Table Name
+    Value: !Ref LaneRequestsTable
+  LaneCacheTableName:
+    Description: DynamoDB Cache Table Name
+    Value: !Ref LaneCacheTable
