@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-concrete: #E6E9EE;
+  --color-paper: #F7F8FA;
+  --color-ink: #0E1B3D;
+  --color-paint: #FFC400;
+  --color-tide: #00B39A;
+  --color-signal: #2340FF;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --ease-lane: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-concrete);
+    color: var(--color-ink);
+  }
+
+  .font-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .display-xl {
+    font-size: clamp(4rem, 12vw, 14rem);
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    font-variation-settings: "wdth" 120, "wght" 850;
+  }
+
+  .display-l {
+    font-size: clamp(2.75rem, 8vw, 7.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    font-variation-settings: "wdth" 115, "wght" 800;
+  }
+
+  .display-heading {
+    font-size: clamp(1.75rem, 3.5vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    font-variation-settings: "wdth" 110, "wght" 750;
+  }
+}
+
+/* Lane road markings & SVG motion */
+@keyframes dashTravel {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.lane-road-dash {
+  stroke-dasharray: 8 12;
+  animation: dashTravel 1.2s linear infinite;
+}
+
+/* Custom scrollbar matching concrete and ink */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #E6E9EE;
+}
+::-webkit-scrollbar-thumb {
+  background: #0E1B3D;
+  border-radius: 2px;
+}
