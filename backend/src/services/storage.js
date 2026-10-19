@@ -172,7 +172,7 @@ export async function getRequestById(requestId) {
  */
 export async function calculateStats(tenantId = 'default-tenant') {
   const records = memoryRequests.filter(
-    r => !tenantId || r.tenantId === tenantId || r.tenantId === 'dev-tenant'
+    r => !tenantId || r.tenantId === tenantId || r.tenantId === 'default-tenant' || r.tenantId === 'dev-tenant'
   );
 
   let totalCost = 0;

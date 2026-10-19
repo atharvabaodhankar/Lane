@@ -7,7 +7,7 @@ export function authenticateApiKey(req, res, next) {
 
   // In local dev, allow requests without key or with test-api-key
   if (process.env.NODE_ENV !== 'production' && (!apiKey || apiKey === 'test-key')) {
-    req.tenantId = 'dev-tenant';
+    req.tenantId = 'default-tenant';
     req.apiKey = apiKey || 'dev-key';
     return next();
   }
@@ -47,7 +47,7 @@ export function authenticateDashboard(req, res, next) {
 
   // Allow in development mode if neither provided
   if (process.env.NODE_ENV !== 'production') {
-    req.tenantId = 'dev-tenant';
+    req.tenantId = 'default-tenant';
     return next();
   }
 

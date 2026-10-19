@@ -136,6 +136,29 @@ export async function invokeBedrock(lane, { messages, system, maxTokens }) {
       effectiveLane: lane
     };
   } catch (err) {
+    // If Anthropic model is pending use case form approval, fall back to Nova Pro
+    if (err.message && err.message.includes('Anthropic use case details have not been submitted')) {
+      console.warn(`[Bedrock] Anthropic form pending; falling back to Amazon Nova Pro: ${err.message}`);
+      const novaProTier = {
+        name: 'Amazon Nova Pro',
+        modelId: 'us.amazon.nova-pro-v1:0',
+        maxTokens: 2048,
+        inputPer1M: 0.8,
+        outputPer1M: 3.2
+      };
+      try {
+        const novaResult = await callModel(novaProTier);
+        return {
+          ...novaResult,
+          escalated: true,
+          initialLane: lane,
+          effectiveLane: lane
+        };
+      } catch (novaErr) {
+        throw new Error(`Bedrock invocation failed: ${novaErr.message}`);
+      }
+    }
+
     // If cheap lane failed, retry once with fallback mid tier
     if (lane === 'cheap') {
       try {

@@ -81,8 +81,9 @@ export async function decideLane(prompt, options = {}) {
     return mockDecide(prompt);
   }
 
+  const timeoutMs = parseInt(process.env.FASTINO_TIMEOUT_MS || tiersConfig.glideTimeoutMs || '3000', 10);
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), tiersConfig.glideTimeoutMs || 800);
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const payload = {

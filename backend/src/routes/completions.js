@@ -66,8 +66,11 @@ router.post(
 
       if (cached && !forceLane) {
         const costData = calculateCacheHitCost(cached.usage?.inputTokens || 25, cached.usage?.outputTokens || 50);
+        const cacheHitId = generateId();
+        const latencyMs = Date.now() - startTime;
+
         const responseData = {
-          id: generateId(),
+          id: cacheHitId,
           answer: cached.answer,
           lane: cached.lane,
           modelId: cached.modelId,
@@ -77,13 +80,37 @@ router.post(
           cost: costData.cost,
           baselineCost: costData.baselineCost,
           savings: costData.savings,
-          latencyMs: Date.now() - startTime,
+          latencyMs,
           decision: {
             confidence: 1.0,
             reason: 'Answer served from cache; zero model inference cost.',
             source: 'cache'
           }
         };
+
+        await logRequestRecord({
+          id: cacheHitId,
+          tenantId: req.tenantId || 'default-tenant',
+          lane: cached.lane,
+          modelId: cached.modelId,
+          source: 'cache',
+          confidence: 1.0,
+          reason: 'Answer served from cache; zero model inference cost.',
+          inputTokens: cached.usage?.inputTokens || 25,
+          outputTokens: cached.usage?.outputTokens || 50,
+          cost: costData.cost,
+          baselineCost: costData.baselineCost,
+          savings: costData.savings,
+          costNum: 0,
+          baselineCostNum: costData.baselineCostNum,
+          savingsNum: costData.savingsNum,
+          latencyMs,
+          cacheHit: true,
+          escalated: false,
+          promptHash,
+          promptPreview: promptPreview ? promptText.slice(0, 120) : null,
+          createdAt: new Date().toISOString()
+        });
 
         const resultEnvelope = successEnvelope(responseData);
         if (idempotencyKey) idempotencyStore.set(idempotencyKey, resultEnvelope);
