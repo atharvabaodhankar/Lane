@@ -14,7 +14,6 @@ Globals:
     Environment:
       Variables:
         NODE_ENV: production
-        AWS_REGION: !Sub "${AWS::Region}"
         FASTINO_BASE_URL: https://api.fastino.ai
         FASTINO_API_KEY: !Ref FastinoApiKey
         ALLOWED_ORIGINS: !Ref AllowedOrigins
