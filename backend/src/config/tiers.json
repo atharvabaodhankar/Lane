@@ -1,25 +1,25 @@
 {
-  "region": "us-east-1",
+  "region": "ap-south-1",
   "tiers": {
     "cheap": {
       "name": "Amazon Nova Micro",
-      "modelId": "us.amazon.nova-micro-v1:0",
+      "modelId": "amazon.nova-micro-v1:0",
       "inputPer1M": 0.035,
       "outputPer1M": 0.14,
       "maxTokens": 512
     },
     "mid": {
-      "name": "Anthropic Claude Haiku 4.5",
-      "modelId": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
-      "inputPer1M": 0.25,
-      "outputPer1M": 1.25,
+      "name": "Amazon Nova Lite",
+      "modelId": "amazon.nova-lite-v1:0",
+      "inputPer1M": 0.06,
+      "outputPer1M": 0.24,
       "maxTokens": 1024
     },
     "strong": {
-      "name": "Anthropic Claude Sonnet 4.5",
-      "modelId": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
-      "inputPer1M": 3.0,
-      "outputPer1M": 15.0,
+      "name": "DeepSeek V3.2",
+      "modelId": "deepseek.v3.2",
+      "inputPer1M": 0.55,
+      "outputPer1M": 2.19,
       "maxTokens": 2048
     }
   },
