@@ -19,13 +19,20 @@ app.use(corsMiddleware);
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// 3. Mount routes
-app.use('/api/health', healthRoutes);
-app.use('/api/v1/config', configRoutes);
-app.use('/api/v1/completions', completionsRoutes);
-app.use('/api/v1/requests', requestsRoutes);
-app.use('/api/v1/stats', statsRoutes);
-app.use('/api/v1/auth', authRoutes);
+// 3. Mount routes (support both /api/* and root /* for seamless API Gateway & local compatibility)
+const routes = [
+  ['/health', healthRoutes],
+  ['/v1/config', configRoutes],
+  ['/v1/completions', completionsRoutes],
+  ['/v1/requests', requestsRoutes],
+  ['/v1/stats', statsRoutes],
+  ['/v1/auth', authRoutes]
+];
+
+for (const [path, router] of routes) {
+  app.use(path, router);
+  app.use(`/api${path}`, router);
+}
 
 // 4. Catch 404
 app.use((req, res) => {
