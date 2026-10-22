@@ -52,8 +52,8 @@ export default function Playground() {
 
         const modelNames = {
           cheap: 'Amazon Nova Micro',
-          mid: 'Anthropic Claude Haiku',
-          strong: 'Anthropic Claude Sonnet 4.5',
+          mid: 'Amazon Nova Lite',
+          strong: 'DeepSeek V3.2',
           reject: 'None (Blocked)'
         };
 
@@ -223,10 +223,10 @@ export default function Playground() {
                   CHEAP — Nova Micro ($0.035)
                 </text>
                 <text x="570" y="83" textAnchor="end" fill="#0E1B3D" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  MID — Claude Haiku ($0.25)
+                  MID — Nova Lite ($0.06)
                 </text>
                 <text x="570" y="138" textAnchor="end" fill="#0E1B3D" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  STRONG — Claude Sonnet ($3.00)
+                  STRONG — DeepSeek V3.2 ($0.55)
                 </text>
               </svg>
 
@@ -257,7 +257,7 @@ export default function Playground() {
                 <div className="text-xl sm:text-2xl font-black font-tabular text-[#0E1B3D] mt-1">
                   ${result.baselineCost}
                 </div>
-                <div className="text-[10px] font-mono text-[#0E1B3D]/70">Claude Sonnet 4.5</div>
+                <div className="text-[10px] font-mono text-[#0E1B3D]/70">DeepSeek V3.2</div>
               </div>
 
               <div className="bg-[#FFC400] p-3 border border-[#0E1B3D]">

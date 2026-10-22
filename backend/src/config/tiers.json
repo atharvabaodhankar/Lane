@@ -3,14 +3,14 @@
   "tiers": {
     "cheap": {
       "name": "Amazon Nova Micro",
-      "modelId": "amazon.nova-micro-v1:0",
+      "modelId": "apac.amazon.nova-micro-v1:0",
       "inputPer1M": 0.035,
       "outputPer1M": 0.14,
       "maxTokens": 512
     },
     "mid": {
       "name": "Amazon Nova Lite",
-      "modelId": "amazon.nova-lite-v1:0",
+      "modelId": "apac.amazon.nova-lite-v1:0",
       "inputPer1M": 0.06,
       "outputPer1M": 0.24,
       "maxTokens": 1024
