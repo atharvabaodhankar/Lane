@@ -49,14 +49,125 @@
 
 /* Lane road markings & SVG motion */
 @keyframes dashTravel {
+  from {
+    stroke-dashoffset: 0;
+  }
   to {
     stroke-dashoffset: -40;
   }
 }
 
+@keyframes laserTravel {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes scannerSweep {
+  0% {
+    transform: translateY(0);
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(50px);
+    opacity: 0.1;
+  }
+}
+
+@keyframes glidePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(35, 64, 255, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px rgba(35, 64, 255, 0.45);
+  }
+}
+
+@keyframes packetShoot {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes beaconRing {
+  0% {
+    r: 4;
+    opacity: 1;
+  }
+  100% {
+    r: 16;
+    opacity: 0;
+  }
+}
+
 .lane-road-dash {
   stroke-dasharray: 8 12;
-  animation: dashTravel 1.2s linear infinite;
+  animation: dashTravel 0.8s linear infinite;
+}
+
+.lane-road-dash-fast {
+  stroke-dasharray: 6 10;
+  animation: dashTravel 0.35s linear infinite;
+}
+
+.glide-scanner {
+  animation: scannerSweep 1.1s ease-in-out infinite alternate;
+}
+
+.glide-pulse-active {
+  animation: glidePulse 1.2s ease-in-out infinite;
+}
+
+.beacon-pulse {
+  animation: beaconRing 1.5s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px currentColor);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px currentColor) drop-shadow(0 0 14px currentColor);
+  }
+}
+
+.lane-glow {
+  animation: pulseGlow 1.2s ease-in-out infinite;
+}
+
+@keyframes scanLineY {
+  0% {
+    transform: translateY(-24px);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(24px);
+    opacity: 0.2;
+  }
+}
+
+.scanline-sweep {
+  animation: scanLineY 0.85s ease-in-out infinite alternate;
 }
 
 /* Custom scrollbar matching concrete and ink */
