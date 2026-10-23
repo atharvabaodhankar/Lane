@@ -7,8 +7,8 @@ const BENCHMARK_ROWS = [
     cheap: '95%',
     mid: '5%',
     strong: '0%',
-    baselineSpend: '$0.0720',
-    laneSpend: '$0.0031',
+    baselineSpend: '₹6.84',
+    laneSpend: '₹0.29',
     savings: '-95.7%'
   },
   {
@@ -17,8 +17,8 @@ const BENCHMARK_ROWS = [
     cheap: '80%',
     mid: '20%',
     strong: '0%',
-    baselineSpend: '$0.0980',
-    laneSpend: '$0.0124',
+    baselineSpend: '₹9.31',
+    laneSpend: '₹1.18',
     savings: '-87.3%'
   },
   {
@@ -27,8 +27,8 @@ const BENCHMARK_ROWS = [
     cheap: '10%',
     mid: '85%',
     strong: '5%',
-    baselineSpend: '$0.2450',
-    laneSpend: '$0.0680',
+    baselineSpend: '₹23.28',
+    laneSpend: '₹6.46',
     savings: '-72.2%'
   },
   {
@@ -37,8 +37,8 @@ const BENCHMARK_ROWS = [
     cheap: '0%',
     mid: '15%',
     strong: '85%',
-    baselineSpend: '$0.4120',
-    laneSpend: '$0.3680',
+    baselineSpend: '₹39.14',
+    laneSpend: '₹34.96',
     savings: '-10.7%'
   },
   {
@@ -47,8 +47,8 @@ const BENCHMARK_ROWS = [
     cheap: '0%',
     mid: '10%',
     strong: '90%',
-    baselineSpend: '$0.5280',
-    laneSpend: '$0.4910',
+    baselineSpend: '₹50.16',
+    laneSpend: '₹46.65',
     savings: '-7.0%'
   }
 ];
@@ -63,29 +63,29 @@ export default function BenchmarkSection() {
   }
 
   return (
-    <section className="py-16 sm:py-24 border-b-2 border-[#0E1B3D] bg-[#E6E9EE]">
+    <section className="py-12 sm:py-20 border-b-2 border-[#0E1B3D] bg-[#E6E9EE]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="mb-12">
+        <div className="mb-10 max-w-4xl">
           <p className="text-xs font-mono font-bold uppercase tracking-widest text-[#0E1B3D] mb-2">
-            The Headline Numbers
+            The Headline Numbers · 1 USD = 95 INR
           </p>
-          <h2 className="display-l font-black text-[#0E1B3D] tracking-tighter uppercase font-sans">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#0E1B3D] tracking-tight uppercase font-sans leading-tight">
             100 prompts. Measurable proof.
           </h2>
-          <p className="mt-4 text-lg text-[#0E1B3D]/80 max-w-2xl">
+          <p className="mt-3 text-base sm:text-lg text-[#0E1B3D]/80 max-w-2xl leading-relaxed">
             "Cut cost by 76.4% with a quality delta of 0.08." A savings claim without verified quality scoring is empty.
           </p>
         </div>
 
         {/* Big Numbers Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-[#FFC400] border-2 border-[#0E1B3D] p-8">
+          <div className="bg-[#FFC400] border-2 border-[#0E1B3D] p-6 sm:p-8">
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-[#0E1B3D]">
               Net Bedrock Spend Reduction
             </span>
-            <div className="display-l font-black font-tabular text-[#0E1B3D] mt-2">
+            <div className="text-3xl sm:text-4xl lg:text-5xl font-black font-tabular text-[#0E1B3D] mt-3 whitespace-nowrap tracking-tight">
               -76.4%
             </div>
             <p className="text-xs font-mono text-[#0E1B3D] mt-2 font-medium">
@@ -93,11 +93,11 @@ export default function BenchmarkSection() {
             </p>
           </div>
 
-          <div className="bg-[#F7F8FA] border-2 border-[#0E1B3D] p-8">
+          <div className="bg-[#F7F8FA] border-2 border-[#0E1B3D] p-6 sm:p-8">
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-[#0E1B3D]">
               Average Quality Delta
             </span>
-            <div className="display-l font-black font-tabular text-[#0E1B3D] mt-2">
+            <div className="text-3xl sm:text-4xl lg:text-5xl font-black font-tabular text-[#0E1B3D] mt-3 whitespace-nowrap tracking-tight">
               0.08
             </div>
             <p className="text-xs font-mono text-[#0E1B3D]/70 mt-2">
@@ -105,11 +105,11 @@ export default function BenchmarkSection() {
             </p>
           </div>
 
-          <div className="bg-[#F7F8FA] border-2 border-[#0E1B3D] p-8">
+          <div className="bg-[#F7F8FA] border-2 border-[#0E1B3D] p-6 sm:p-8">
             <span className="text-xs font-mono uppercase tracking-widest font-bold text-[#0E1B3D]">
               GLiDE Decision Overhead
             </span>
-            <div className="display-l font-black font-tabular text-[#2340FF] mt-2">
+            <div className="text-3xl sm:text-4xl lg:text-5xl font-black font-tabular text-[#2340FF] mt-3 whitespace-nowrap tracking-tight">
               18 ms
             </div>
             <p className="text-xs font-mono text-[#0E1B3D]/70 mt-2">
@@ -120,12 +120,12 @@ export default function BenchmarkSection() {
 
         {/* Benchmark Table */}
         <div className="bg-[#F7F8FA] border-2 border-[#0E1B3D] overflow-x-auto mb-12">
-          <div className="p-4 border-b border-[#0E1B3D] flex items-center justify-between">
+          <div className="p-4 border-b border-[#0E1B3D] flex flex-wrap items-center justify-between gap-2">
             <span className="text-xs font-mono font-bold uppercase text-[#0E1B3D]">
-              Full 100-Prompt Evaluation Matrix
+              Full 100-Prompt Evaluation Matrix (All values in ₹ INR)
             </span>
-            <span className="text-xs font-mono text-[#0E1B3D]/70">
-              Prices as of: 2026-10-01
+            <span className="text-xs font-mono text-[#0E1B3D]/70 font-bold">
+              Exchange Rate: 1 USD = ₹95 · ap-south-1
             </span>
           </div>
           <table className="w-full text-left border-collapse text-sm font-sans">
@@ -133,9 +133,9 @@ export default function BenchmarkSection() {
               <tr className="border-b-2 border-[#0E1B3D] bg-[#E6E9EE] text-xs font-mono font-bold text-[#0E1B3D] uppercase">
                 <th className="py-3 px-4">Category</th>
                 <th className="py-3 px-4">Prompts</th>
-                <th className="py-3 px-4">Cheap (Nova)</th>
-                <th className="py-3 px-4">Mid (Haiku)</th>
-                <th className="py-3 px-4">Strong (Sonnet)</th>
+                <th className="py-3 px-4">Cheap (Nova Micro)</th>
+                <th className="py-3 px-4">Mid (Nova Lite)</th>
+                <th className="py-3 px-4">Strong (DeepSeek)</th>
                 <th className="py-3 px-4">Lane Spend</th>
                 <th className="py-3 px-4">Baseline Spend</th>
                 <th className="py-3 px-4 text-right">Savings</th>

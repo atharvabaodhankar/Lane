@@ -40,7 +40,7 @@ export default function PromptJourney() {
           <p className="text-xs font-mono font-bold uppercase tracking-widest text-[#0E1B3D] mb-2">
             The Mechanics
           </p>
-          <h2 className="display-l font-black text-[#0E1B3D] tracking-tighter uppercase font-sans">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#0E1B3D] tracking-tight uppercase font-sans leading-tight">
             How a prompt travels.
           </h2>
           <p className="mt-4 text-lg text-[#0E1B3D]/80 max-w-2xl">

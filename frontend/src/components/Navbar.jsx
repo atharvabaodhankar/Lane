@@ -64,10 +64,14 @@ export default function Navbar({ activeTab, setActiveTab }) {
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 border border-[#0E1B3D] bg-[#FFC400] text-xs font-mono font-bold text-[#0E1B3D]">
+            <span>₹ INR (~95/USD)</span>
+          </div>
+
           <div className="hidden sm:flex items-center gap-2 px-3 py-1 border border-[#0E1B3D] bg-[#F7F8FA] text-xs font-mono font-medium">
             <span className="w-2 h-2 rounded-full bg-[#00B39A] animate-pulse" />
-            <span>Bedrock Gateway: Online</span>
+            <span>Bedrock: Online (ap-south-1)</span>
           </div>
 
           <button

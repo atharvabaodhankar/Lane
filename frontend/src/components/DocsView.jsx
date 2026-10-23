@@ -26,17 +26,17 @@ export default function DocsView() {
         <p className="text-xs font-mono uppercase tracking-widest text-[#0E1B3D] mb-2 font-bold">
           Technical Reference · Active in ap-south-1 (Mumbai)
         </p>
-        <h1 className="display-l font-black text-[#0E1B3D] tracking-tighter uppercase font-sans">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#0E1B3D] tracking-tight uppercase font-sans leading-tight">
           Lane Documentation
         </h1>
-        <p className="mt-4 text-lg text-[#0E1B3D]/80 leading-relaxed font-sans">
+        <p className="mt-3 text-base sm:text-lg text-[#0E1B3D]/80 leading-relaxed font-sans">
           An open-source intelligent proxy for Amazon Bedrock that routes every prompt to the cheapest model that can answer it using Fastino GLiDE.
         </p>
       </div>
 
       {/* 1. Quick Adoption */}
       <section className="mb-12">
-        <h2 className="text-2xl font-black font-sans text-[#0E1B3D] uppercase tracking-tight mb-4">
+        <h2 className="text-xl sm:text-2xl font-black font-sans text-[#0E1B3D] uppercase tracking-tight mb-4">
           One-Line Adoption (Live Endpoint)
         </h2>
         <p className="text-sm font-sans text-[#0E1B3D]/80 leading-relaxed mb-4">
@@ -56,9 +56,14 @@ export default function DocsView() {
 
       {/* 2. Model Lanes */}
       <section className="mb-12">
-        <h2 className="text-2xl font-black font-sans text-[#0E1B3D] uppercase tracking-tight mb-4">
-          Model Lanes & Pricing (ap-south-1)
-        </h2>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <h2 className="text-xl sm:text-2xl font-black font-sans text-[#0E1B3D] uppercase tracking-tight">
+            Model Lanes & Pricing (ap-south-1)
+          </h2>
+          <span className="text-xs font-mono font-bold bg-[#FFC400] text-[#0E1B3D] px-2 py-0.5 border border-[#0E1B3D]">
+            Rate: 1 USD = ₹95 INR
+          </span>
+        </div>
         <p className="text-sm font-sans text-[#0E1B3D]/80 leading-relaxed mb-4">
           Model IDs and rates are configured in <code className="bg-white px-2 py-0.5 border border-[#0E1B3D] font-mono text-xs">backend/src/config/tiers.json</code>. Swapping a model is a configuration change, not a code rewrite.
         </p>
@@ -69,8 +74,8 @@ export default function DocsView() {
               <tr className="bg-[#E6E9EE] border-b-2 border-[#0E1B3D] text-[#0E1B3D] font-bold uppercase">
                 <th className="py-3 px-4">Lane</th>
                 <th className="py-3 px-4">Model</th>
-                <th className="py-3 px-4">Input / 1M</th>
-                <th className="py-3 px-4">Output / 1M</th>
+                <th className="py-3 px-4">Input (₹/1M)</th>
+                <th className="py-3 px-4">Output (₹/1M)</th>
                 <th className="py-3 px-4">Use Cases</th>
               </tr>
             </thead>
@@ -78,29 +83,29 @@ export default function DocsView() {
               <tr>
                 <td className="py-3 px-4 font-bold text-[#0E1B3D] bg-[#FFC400]/20">cheap</td>
                 <td className="py-3 px-4 font-bold">Amazon Nova Micro</td>
-                <td className="py-3 px-4">$0.035</td>
-                <td className="py-3 px-4">$0.14</td>
+                <td className="py-3 px-4 font-bold">₹3.33</td>
+                <td className="py-3 px-4 font-bold">₹13.30</td>
                 <td className="py-3 px-4 text-[#0E1B3D]/80">Short Q&A, classifications, basic rewrites</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 font-bold text-[#0E1B3D] bg-[#00B39A]/20">mid</td>
                 <td className="py-3 px-4 font-bold">Amazon Nova Lite</td>
-                <td className="py-3 px-4">$0.060</td>
-                <td className="py-3 px-4">$0.24</td>
+                <td className="py-3 px-4 font-bold">₹5.70</td>
+                <td className="py-3 px-4 font-bold">₹22.80</td>
                 <td className="py-3 px-4 text-[#0E1B3D]/80">Conversational queries, RAG synthesis, summaries</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 font-bold text-[#0E1B3D] bg-[#2340FF]/20">strong</td>
                 <td className="py-3 px-4 font-bold">DeepSeek V3.2</td>
-                <td className="py-3 px-4">$0.550</td>
-                <td className="py-3 px-4">$2.19</td>
+                <td className="py-3 px-4 font-bold">₹52.25</td>
+                <td className="py-3 px-4 font-bold">₹208.05</td>
                 <td className="py-3 px-4 text-[#0E1B3D]/80">High-stakes reasoning, code generation, logic proofs</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 font-bold text-[#0E1B3D] bg-black/10">reject</td>
                 <td className="py-3 px-4 font-bold">None (No Model Call)</td>
-                <td className="py-3 px-4">$0.00</td>
-                <td className="py-3 px-4">$0.00</td>
+                <td className="py-3 px-4 font-bold">₹0.00</td>
+                <td className="py-3 px-4 font-bold">₹0.00</td>
                 <td className="py-3 px-4 text-[#0E1B3D]/80">PII leaks, prompt injections, malicious payloads</td>
               </tr>
             </tbody>

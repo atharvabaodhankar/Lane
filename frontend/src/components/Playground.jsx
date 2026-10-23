@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { sendCompletion } from '../lib/apiClient';
+import { formatCost } from '../lib/currency';
 
 const PRESETS = [
   { label: 'Short Q&A', prompt: 'What is the capital of Japan and its population?' },
@@ -14,7 +15,7 @@ export default function Playground() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState({
     lane: 'cheap',
-    modelId: 'us.amazon.nova-micro-v1:0',
+    modelId: 'apac.amazon.nova-micro-v1:0',
     modelName: 'Amazon Nova Micro',
     cost: '0.0000035',
     baselineCost: '0.0004500',
@@ -103,20 +104,25 @@ export default function Playground() {
   }
 
   return (
-    <section className="py-12 sm:py-20 border-b-2 border-[#0E1B3D]">
+    <section className="py-10 sm:py-16 border-b-2 border-[#0E1B3D]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Massive Headline */}
-        <div className="mb-12 max-w-5xl">
-          <p className="text-sm font-mono tracking-widest text-[#0E1B3D] uppercase mb-4">
-            Autonomous Bedrock Cost Gateway
-          </p>
-          <h1 className="display-xl font-black text-[#0E1B3D] tracking-tighter uppercase font-sans">
+        {/* Crisp Controlled Headline */}
+        <div className="mb-8 max-w-4xl">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs font-mono font-bold tracking-widest text-[#0E1B3D] uppercase bg-[#FFC400] px-2 py-0.5 border border-[#0E1B3D]">
+              Autonomous Bedrock Cost Gateway
+            </span>
+            <span className="text-xs font-mono text-[#0E1B3D]/70 font-bold">
+              · All pricing in ₹ INR (~95/USD)
+            </span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0E1B3D] tracking-tight uppercase font-sans leading-tight">
             The cheapest model that can answer it.
           </h1>
-          <p className="mt-6 text-xl sm:text-2xl text-[#0E1B3D]/80 max-w-3xl leading-relaxed">
-            Most apps call Claude Sonnet for everything. Lane puts Fastino GLiDE in front of Amazon Bedrock
-            to peel each prompt into the lowest-cost lane that answers it reliably.
+          <p className="mt-4 text-base sm:text-lg text-[#0E1B3D]/80 max-w-3xl leading-relaxed">
+            Stop routing every query to expensive top-tier models. Lane puts Fastino GLiDE in front of Amazon Bedrock
+            to dynamically peel each prompt into the lowest-cost lane in ₹ INR with verified accuracy.
           </p>
         </div>
 
@@ -219,14 +225,14 @@ export default function Playground() {
                 />
 
                 {/* Labels on SVG */}
-                <text x="570" y="28" textAnchor="end" fill="#0E1B3D" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  CHEAP — Nova Micro ($0.035)
+                <text x="580" y="28" textAnchor="end" fill="#0E1B3D" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  CHEAP — Nova Micro (₹3.33/1M)
                 </text>
-                <text x="570" y="83" textAnchor="end" fill="#0E1B3D" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  MID — Nova Lite ($0.06)
+                <text x="580" y="83" textAnchor="end" fill="#0E1B3D" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  MID — Nova Lite (₹5.70/1M)
                 </text>
-                <text x="570" y="138" textAnchor="end" fill="#0E1B3D" fontSize="10" fontFamily="monospace" fontWeight="bold">
-                  STRONG — DeepSeek V3.2 ($0.55)
+                <text x="580" y="138" textAnchor="end" fill="#0E1B3D" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                  STRONG — DeepSeek V3.2 (₹52.25/1M)
                 </text>
               </svg>
 
@@ -242,22 +248,22 @@ export default function Playground() {
               <span className="text-[#0E1B3D]/80">{result.reason}</span>
             </div>
 
-            {/* Cost and Savings Numerals */}
-            <div className="mt-4 grid grid-cols-3 gap-3 border-t-2 border-[#0E1B3D] pt-4">
+            {/* Cost and Savings Numerals (in INR) */}
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 border-t-2 border-[#0E1B3D] pt-4">
               <div className="bg-[#E6E9EE] p-3 border border-[#0E1B3D]">
-                <div className="text-[10px] font-mono uppercase tracking-wider text-[#0E1B3D]">This Request Cost</div>
-                <div className="text-xl sm:text-2xl font-black font-tabular text-[#0E1B3D] mt-1">
-                  ${result.cost}
+                <div className="text-[10px] font-mono uppercase tracking-wider text-[#0E1B3D] font-bold">This Request Cost</div>
+                <div className="text-xl sm:text-2xl font-black font-tabular text-[#0E1B3D] mt-1 break-all">
+                  {formatCost(result.cost)}
                 </div>
-                <div className="text-[10px] font-mono text-[#0E1B3D]/70">{result.modelName}</div>
+                <div className="text-[10px] font-mono text-[#0E1B3D]/70 truncate">{result.modelName}</div>
               </div>
 
               <div className="bg-[#E6E9EE] p-3 border border-[#0E1B3D]">
-                <div className="text-[10px] font-mono uppercase tracking-wider text-[#0E1B3D]">Always-Strong Cost</div>
-                <div className="text-xl sm:text-2xl font-black font-tabular text-[#0E1B3D] mt-1">
-                  ${result.baselineCost}
+                <div className="text-[10px] font-mono uppercase tracking-wider text-[#0E1B3D] font-bold">Always-Strong Cost</div>
+                <div className="text-xl sm:text-2xl font-black font-tabular text-[#0E1B3D] mt-1 break-all">
+                  {formatCost(result.baselineCost)}
                 </div>
-                <div className="text-[10px] font-mono text-[#0E1B3D]/70">DeepSeek V3.2</div>
+                <div className="text-[10px] font-mono text-[#0E1B3D]/70 truncate">DeepSeek V3.2</div>
               </div>
 
               <div className="bg-[#FFC400] p-3 border border-[#0E1B3D]">
@@ -265,7 +271,7 @@ export default function Playground() {
                 <div className="text-xl sm:text-2xl font-black font-tabular text-[#0E1B3D] mt-1">
                   {result.savingsPercent}
                 </div>
-                <div className="text-[10px] font-mono font-bold text-[#0E1B3D]">${result.savings}</div>
+                <div className="text-[10px] font-mono font-bold text-[#0E1B3D] truncate">{formatCost(result.savings)} saved</div>
               </div>
             </div>
 

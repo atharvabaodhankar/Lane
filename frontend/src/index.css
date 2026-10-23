@@ -24,24 +24,26 @@
   }
 
   .display-xl {
-    font-size: clamp(4rem, 12vw, 14rem);
-    line-height: 0.88;
-    letter-spacing: -0.04em;
-    font-variation-settings: "wdth" 120, "wght" 850;
+    font-size: clamp(2.25rem, 4.2vw, 3.5rem);
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    font-variation-settings: "wdth" 105, "wght" 850;
+    word-break: break-word;
   }
 
   .display-l {
-    font-size: clamp(2.75rem, 8vw, 7.5rem);
-    line-height: 0.92;
-    letter-spacing: -0.03em;
-    font-variation-settings: "wdth" 115, "wght" 800;
+    font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    font-variation-settings: "wdth" 105, "wght" 800;
+    word-break: break-word;
   }
 
   .display-heading {
-    font-size: clamp(1.75rem, 3.5vw, 3rem);
-    line-height: 1.05;
-    letter-spacing: -0.025em;
-    font-variation-settings: "wdth" 110, "wght" 750;
+    font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-variation-settings: "wdth" 105, "wght" 750;
   }
 }
 

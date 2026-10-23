@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchStats, fetchRequests } from '../lib/apiClient';
+import { formatCost } from '../lib/currency';
 
 export default function DashboardView() {
   const [stats, setStats] = useState(null);
@@ -26,33 +27,38 @@ export default function DashboardView() {
     );
   }
 
-  // Calculate percentages for lane split
-  const totalLanes =
-    (stats.laneSplit.cheap || 0) +
-    (stats.laneSplit.mid || 0) +
-    (stats.laneSplit.strong || 0) +
-    (stats.laneSplit.reject || 0) || 1;
+  // Calculate percentages for lane split safely
+  const actualTotal =
+    (stats.laneSplit?.cheap || 0) +
+    (stats.laneSplit?.mid || 0) +
+    (stats.laneSplit?.strong || 0) +
+    (stats.laneSplit?.reject || 0);
 
-  const cheapPct = Math.round(((stats.laneSplit.cheap || 0) / totalLanes) * 100);
-  const midPct = Math.round(((stats.laneSplit.mid || 0) / totalLanes) * 100);
-  const strongPct = Math.round(((stats.laneSplit.strong || 0) / totalLanes) * 100);
-  const rejectPct = 100 - cheapPct - midPct - strongPct;
+  const cheapPct = actualTotal > 0 ? Math.round(((stats.laneSplit.cheap || 0) / actualTotal) * 100) : 0;
+  const midPct = actualTotal > 0 ? Math.round(((stats.laneSplit.mid || 0) / actualTotal) * 100) : 0;
+  const strongPct = actualTotal > 0 ? Math.round(((stats.laneSplit.strong || 0) / actualTotal) * 100) : 0;
+  const rejectPct = actualTotal > 0 ? Math.max(0, 100 - cheapPct - midPct - strongPct) : 0;
 
   return (
-    <div className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-10 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      {/* Top Banner: Saved This Week */}
-      <div className="mb-12 bg-[#F7F8FA] border-2 border-[#0E1B3D] p-8">
+      {/* Top Banner: Saved This Period (INR) */}
+      <div className="mb-10 bg-[#F7F8FA] border-2 border-[#0E1B3D] p-6 sm:p-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <span className="text-xs font-mono uppercase tracking-widest text-[#0E1B3D] font-bold">
-              Saved This Period
-            </span>
-            <div className="display-xl font-black font-tabular text-[#0E1B3D] mt-2">
-              ${stats.totalSavings}
+          <div className="max-w-xl">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-mono uppercase tracking-widest text-[#0E1B3D] font-bold">
+                Saved This Period
+              </span>
+              <span className="text-xs font-mono font-bold bg-[#FFC400] text-[#0E1B3D] px-2 py-0.5 border border-[#0E1B3D]">
+                ₹ INR (~95/USD)
+              </span>
+            </div>
+            <div className="text-3xl sm:text-4xl md:text-5xl font-black font-tabular text-[#0E1B3D] tracking-tight break-all">
+              {formatCost(stats.totalSavings)}
             </div>
             <div className="text-sm font-mono text-[#0E1B3D]/70 mt-2">
-              of <span className="font-bold text-[#0E1B3D]">${stats.totalBaselineCost}</span> always-strong baseline ({stats.savingsPercent} net reduction)
+              of <span className="font-bold text-[#0E1B3D]">{formatCost(stats.totalBaselineCost)}</span> always-strong baseline ({stats.savingsPercent} net reduction)
             </div>
           </div>
 
@@ -143,51 +149,57 @@ export default function DashboardView() {
       </div>
 
       {/* Stacked Lane Split Bar */}
-      <div className="mb-12 bg-[#F7F8FA] border-2 border-[#0E1B3D] p-8">
+      <div className="mb-12 bg-[#F7F8FA] border-2 border-[#0E1B3D] p-6 sm:p-8">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-black font-sans uppercase tracking-tight text-[#0E1B3D]">
             Traffic Split by Lane
           </h3>
-          <span className="text-xs font-mono text-[#0E1B3D]/70">
+          <span className="text-xs font-mono text-[#0E1B3D]/70 font-bold">
             {stats.totalRequests} total evaluated requests
           </span>
         </div>
 
-        {/* Stacked Bar with inline labels */}
-        <div className="w-full h-12 flex border-2 border-[#0E1B3D] overflow-hidden text-xs font-mono font-bold">
-          {cheapPct > 0 && (
-            <div
-              style={{ width: `${cheapPct}%` }}
-              className="bg-[#FFC400] text-[#0E1B3D] flex items-center justify-center px-2 truncate border-r border-[#0E1B3D]"
-            >
-              Cheap: {cheapPct}%
-            </div>
-          )}
-          {midPct > 0 && (
-            <div
-              style={{ width: `${midPct}%` }}
-              className="bg-[#00B39A] text-[#0E1B3D] flex items-center justify-center px-2 truncate border-r border-[#0E1B3D]"
-            >
-              Mid: {midPct}%
-            </div>
-          )}
-          {strongPct > 0 && (
-            <div
-              style={{ width: `${strongPct}%` }}
-              className="bg-[#2340FF] text-white flex items-center justify-center px-2 truncate border-r border-[#0E1B3D]"
-            >
-              Strong: {strongPct}%
-            </div>
-          )}
-          {rejectPct > 0 && (
-            <div
-              style={{ width: `${rejectPct}%` }}
-              className="bg-[#0E1B3D] text-[#F7F8FA] flex items-center justify-center px-2 truncate"
-            >
-              Reject
-            </div>
-          )}
-        </div>
+        {/* Stacked Bar with inline labels or empty state */}
+        {actualTotal === 0 ? (
+          <div className="w-full h-12 flex items-center justify-center bg-[#E6E9EE] border-2 border-[#0E1B3D] text-xs font-mono font-medium text-[#0E1B3D]/70">
+            Awaiting incoming prompts to generate traffic breakdown...
+          </div>
+        ) : (
+          <div className="w-full h-12 flex border-2 border-[#0E1B3D] overflow-hidden text-xs font-mono font-bold">
+            {cheapPct > 0 && (
+              <div
+                style={{ width: `${cheapPct}%` }}
+                className="bg-[#FFC400] text-[#0E1B3D] flex items-center justify-center px-2 truncate border-r border-[#0E1B3D]"
+              >
+                Cheap: {cheapPct}%
+              </div>
+            )}
+            {midPct > 0 && (
+              <div
+                style={{ width: `${midPct}%` }}
+                className="bg-[#00B39A] text-[#0E1B3D] flex items-center justify-center px-2 truncate border-r border-[#0E1B3D]"
+              >
+                Mid: {midPct}%
+              </div>
+            )}
+            {strongPct > 0 && (
+              <div
+                style={{ width: `${strongPct}%` }}
+                className="bg-[#2340FF] text-white flex items-center justify-center px-2 truncate border-r border-[#0E1B3D]"
+              >
+                Strong: {strongPct}%
+              </div>
+            )}
+            {rejectPct > 0 && (
+              <div
+                style={{ width: `${rejectPct}%` }}
+                className="bg-[#0E1B3D] text-[#F7F8FA] flex items-center justify-center px-2 truncate"
+              >
+                Reject: {rejectPct}%
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Expandable Request History Table */}
@@ -196,7 +208,9 @@ export default function DashboardView() {
           <h3 className="text-lg font-black font-sans uppercase text-[#0E1B3D]">
             Recent Request Log
           </h3>
-          <span className="text-xs font-mono text-[#0E1B3D]/70">Click any row to inspect GLiDE decision</span>
+          <span className="text-xs font-mono text-[#0E1B3D]/70 font-bold">
+            Values in ₹ INR · Click row to inspect GLiDE decision
+          </span>
         </div>
 
         <table className="w-full text-left border-collapse text-xs font-mono">
@@ -205,8 +219,8 @@ export default function DashboardView() {
               <th className="py-3 px-4">Time</th>
               <th className="py-3 px-4">Lane</th>
               <th className="py-3 px-4">Model</th>
-              <th className="py-3 px-4">Cost</th>
-              <th className="py-3 px-4">Saved</th>
+              <th className="py-3 px-4">Cost (₹)</th>
+              <th className="py-3 px-4">Saved (₹)</th>
               <th className="py-3 px-4">Latency</th>
             </tr>
           </thead>
@@ -235,9 +249,9 @@ export default function DashboardView() {
                       </span>
                     </td>
                     <td className="py-3 px-4 font-bold text-[#0E1B3D] truncate max-w-xs">{r.modelId}</td>
-                    <td className="py-3 px-4 font-tabular font-bold">${r.cost}</td>
+                    <td className="py-3 px-4 font-tabular font-bold">{formatCost(r.cost)}</td>
                     <td className="py-3 px-4 font-tabular text-[#00B39A] font-bold">
-                      {parseFloat(r.savings) > 0 ? `+$${r.savings}` : '$0.0000000'}
+                      {parseFloat(r.savings) > 0 ? `+${formatCost(r.savings)}` : '₹0.0000'}
                     </td>
                     <td className="py-3 px-4 text-[#0E1B3D]/70">{r.latencyMs} ms</td>
                   </tr>
